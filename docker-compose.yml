@@ -1,0 +1,27 @@
+version: '3'
+
+volumes:
+  db_data: {}
+  db_data_backups: {}
+
+services:
+  app:
+    user: "1000"
+    build:
+      context: ./backend
+      dockerfile: ./compose/local/django/Dockerfile
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    ports:
+      - '8000:8000'
+
+  db:
+    image: "postgres:14-bullseye"
+    volumes:
+      - db_data:/var/lib/dbql/data
+    env_file:
+      - ./backend/.env
