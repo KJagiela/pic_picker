@@ -46,10 +46,10 @@ repos:
     hooks:
       - id: isort
 
-  - repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: 'v0.0.265'
     hooks:
-      - id: flake8
+      - id: ruff
 
 # sets up .pre-commit-ci.yaml to ensure pre-commit dependencies stay up to date
 ci:

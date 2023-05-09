@@ -16,14 +16,30 @@ plugins = ["django_coverage_plugin"]
 
 # ==== black ====
 [tool.black]
-line-length = 119
+line-length = 88
 target-version = ['py311']
+skip-string-normalization = true
 
 
 # ==== isort ====
 [tool.isort]
-profile = "black"
-line_length = 119
+line_length = 88
+indent = 4
+# use Vertical Hanging Indent mode
+multi_line_output = 3
+# add one line between `import abc` and `from abc import ABC`
+lines_between_types = 1
+# add a trailing comma to the end of from imports
+include_trailing_comma = 1
+# use tuple splitting for too long single import
+use_parentheses = true
+# split imports to multiline, when 2 or more imports in one line
+force_grid_wrap = 2
+# `django` related settings
+known_django = "django"
+# add projects module to first party category
+# place imports, which section cannot be determined, to third party category
+default_section = "THIRDPARTY"
 known_first_party = [
     "apps",
     "config",
@@ -53,27 +69,5 @@ ignore_errors = true
 [tool.django-stubs]
 django_settings_module = "config.settings.test"
 
-
-# TODO add ruff
-
-[tool.isort]
-line_length = 88
-indent = 4
-# use Vertical Hanging Indent mode
-multi_line_output = 3
-# add one line between `import abc` and `from abc import ABC`
-lines_between_types = 1
-# add a trailing comma to the end of from imports
-include_trailing_comma = 1
-# use tuple splitting for too long single import
-use_parentheses = true
-# split imports to multiline, when 2 or more imports in one line
-force_grid_wrap = 2
-# `django` related settings
-known_django = django
-# add projects module to first party category
-known_first_party = apps, config
-# place imports, which section cannot be determined, to third party category
-default_section = THIRDPARTY
-sections = FUTURE,STDLIB,DJANGO,THIRDPARTY,FIRSTPARTY,LOCALFOLDER
-skip=migrations
+[tool.ruff]
+exclude = ["migrations"]
