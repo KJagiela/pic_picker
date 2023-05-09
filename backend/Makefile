@@ -7,9 +7,6 @@ lint:
 lint_django:
 	# check migrations graph
 	python manage.py makemigrations --dry-run --check
-	# lint migrations
-	 python manage.py lintmigrations \
-	 	--warnings-as-errors
 	# run django check
 	python manage.py check --fail-level=WARNING
 

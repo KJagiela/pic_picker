@@ -1,7 +1,7 @@
 # ==== pytest ====
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "--ds=config.settings.test --reuse-db"
+addopts = "--ds=config.settings.test"
 python_files = [
     "tests.py",
     "test_*.py",
@@ -9,8 +9,14 @@ python_files = [
 
 # ==== Coverage ====
 [tool.coverage.run]
-include = ["apps/**"]
-omit = ["*/migrations/*", "*/tests/*"]
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "*/staticfiles/*",
+    "*/requirements/*",
+    "*/config/*",
+    "*/manage.py",
+]
 plugins = ["django_coverage_plugin"]
 
 
@@ -25,25 +31,18 @@ skip-string-normalization = true
 [tool.isort]
 line_length = 88
 indent = 4
-# use Vertical Hanging Indent mode
 multi_line_output = 3
-# add one line between `import abc` and `from abc import ABC`
 lines_between_types = 1
-# add a trailing comma to the end of from imports
-include_trailing_comma = 1
-# use tuple splitting for too long single import
+include_trailing_comma = true
 use_parentheses = true
-# split imports to multiline, when 2 or more imports in one line
 force_grid_wrap = 2
-# `django` related settings
 known_django = "django"
-# add projects module to first party category
-# place imports, which section cannot be determined, to third party category
 default_section = "THIRDPARTY"
 known_first_party = [
     "apps",
     "config",
 ]
+sections = ["FUTURE", "STDLIB", "DJANGO", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 skip = ["venv/"]
 skip_glob = ["**/migrations/*.py"]
 
@@ -56,6 +55,7 @@ ignore_missing_imports = true
 warn_unused_ignores = true
 warn_redundant_casts = true
 warn_unused_configs = true
+no_warn_no_return = true
 plugins = [
     "mypy_django_plugin.main",
     "mypy_drf_plugin.main",

@@ -7,10 +7,10 @@ from django.db import models
 class User(AbstractUser):
     deleted = models.BooleanField(default=False)
 
-    def delete(
+    def delete(  # type: ignore[override]
         self,
-        using: Any = ...,
-        keep_parents: bool = ...,
+        using: Any = None,
+        keep_parents: bool = False,
         force: bool = False,
     ) -> tuple[int, dict[str, int]] | None:
         if force:

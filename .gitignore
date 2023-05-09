@@ -280,3 +280,5 @@ backend/apps/media/
 .envs/*
 
 .idea
+**/.ruff_cache
+*/.tests_reports
