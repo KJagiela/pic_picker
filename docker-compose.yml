@@ -6,7 +6,7 @@ volumes:
 
 services:
   app:
-    user: "1000"
+    user: '1000'
     build:
       context: ./backend
       dockerfile: ./compose/local/django/Dockerfile
@@ -19,8 +19,23 @@ services:
     ports:
       - '8000:8000'
 
+  web:
+    build:
+      context: .
+      dockerfile: ./frontend/compose/Dockerfile
+      target: develop-stage
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    env_file:
+      - ./frontend/.env
+    ports:
+      - '9000:9000'
+
   db:
-    image: "postgres:14-bullseye"
+    image: 'postgres:14-bullseye'
     volumes:
       - db_data:/var/lib/dbql/data
     env_file:
