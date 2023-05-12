@@ -11,7 +11,11 @@ class Challenge(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=256)
     created_at = models.DateTimeField(auto_now_add=True)
-    owner = models.ForeignKey('users.User', on_delete=models.PROTECT)
+    owner = models.ForeignKey(
+        'users.User',
+        on_delete=models.PROTECT,
+        related_name='challenges',
+    )
 
     def __str__(self) -> str:
         return f"{self.owner}'s {self.name} challenge"
@@ -19,7 +23,11 @@ class Challenge(models.Model):
 
 class PhotoSubject(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    challenge = models.ForeignKey('challenges.Challenge', on_delete=models.CASCADE)
+    challenge = models.ForeignKey(
+        'challenges.Challenge',
+        on_delete=models.CASCADE,
+        related_name='subjects',
+    )
     name = models.CharField(max_length=256)
 
     def __str__(self):
@@ -29,8 +37,16 @@ class PhotoSubject(models.Model):
 class ChallengeEntry(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     photo = models.ImageField(upload_to=entry_path)
-    subject = models.ForeignKey('challenges.PhotoSubject', on_delete=models.CASCADE)
-    owner = models.ForeignKey('users.User', on_delete=models.PROTECT)
+    subject = models.ForeignKey(
+        'challenges.PhotoSubject',
+        on_delete=models.CASCADE,
+        related_name='entries',
+    )
+    owner = models.ForeignKey(
+        'users.User',
+        on_delete=models.PROTECT,
+        related_name='entries',
+    )
 
     def __str__(self):
         return f"{self.owner}'s entry in category {self.subject}"
