@@ -1,16 +1,27 @@
-from django.db.models import QuerySet
+import random
+
+from django.db.models import Count
+from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 
-from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from apps.challenges.models import (
-    Challenge,
-    ChallengeEntry,
-)
+from apps.challenges.models import Challenge
+from apps.challenges.serializers import PhotoSubjectSerializer
 
 
-class PicPickerView(generics.GenericAPIView):
-    def get_queryset(self) -> QuerySet[ChallengeEntry]:
-        challenge_id = self.request.data.get('challenge_id')
+class PicPickerView(APIView):
+    def get(self, request: HttpRequest, *args, **kwargs):
+        challenge_id = self.request.GET.get('challenge_id')
         challenge = get_object_or_404(Challenge, id=challenge_id)
-        challenge.subjects
+        subjects = (
+            challenge.subjects.exclude(voters=request.user)
+            .annotate(no_entries=Count('entries'))
+            .filter(no_entries__gt=0)
+        )
+        current_subject = random.choice(subjects)
+        serializer_data = PhotoSubjectSerializer(
+            current_subject, context={'request': self.request}
+        ).data
+        return Response(serializer_data)

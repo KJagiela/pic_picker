@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from . import models
+from apps.challenges import models
 
 
 class ChallengeAdmin(admin.ModelAdmin):

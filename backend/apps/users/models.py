@@ -22,7 +22,7 @@ class User(AbstractUser):
         self.save(update_fields=['deleted', 'username', 'email'])
 
 
-class UserVotes(models.Model):
+class UserVote(models.Model):
     user = models.ForeignKey(
         'users.User',
         on_delete=models.CASCADE,

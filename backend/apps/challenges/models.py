@@ -29,6 +29,7 @@ class PhotoSubject(models.Model):
         related_name='subjects',
     )
     name = models.CharField(max_length=256)
+    voters = models.ManyToManyField(to='users.User', through='users.UserVote')
 
     def __str__(self):
         return f'{self.name} for {self.challenge}'
