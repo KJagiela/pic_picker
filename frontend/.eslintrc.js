@@ -10,5 +10,9 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['vue'],
-  rules: {},
+  rules: {
+    "max-len": ["error", {
+        "code": 120,
+    }]
+},
 };

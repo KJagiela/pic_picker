@@ -56,9 +56,9 @@ async function start ({
   router
   , store
 }, bootFiles) {
+  
 
-
-
+  
   let hasRedirected = false
   const getRedirectUrl = url => {
     try { return router.resolve(url).href }
@@ -81,7 +81,7 @@ async function start ({
     // continue if we didn't fail to resolve the url
     if (href !== null) {
       window.location.href = href
-
+      
     }
   }
 
@@ -113,22 +113,22 @@ async function start ({
   if (hasRedirected === true) {
     return
   }
-
+  
 
   app.use(router)
+  
 
+  
 
+    
 
-
-
-
-
+    
       app.mount('#q-app')
+    
 
+    
 
-
-
-
+  
 
 }
 
@@ -153,11 +153,12 @@ createQuasarApp(createApp, quasarUserOptions)
       ]
 
     return Promise[ method ]([
-
+      
       import('boot/axios')
-
+      
     ]).then(bootFiles => {
       const boot = mapFn(bootFiles).filter(entry => typeof entry === 'function')
       start(app, boot)
     })
   })
+

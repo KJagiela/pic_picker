@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/', include('config.api_router')),
     path('auth-token/', obtain_auth_token),
     path('api/', include('challenges.urls')),
+    path('api/', include('users.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

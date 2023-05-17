@@ -39,4 +39,5 @@ class RegisterVoteView(APIView):
             subject_id=subject_id,
             entry_id=entry_id,
         )
+        # TODO: return something?
         return Response()

@@ -5,13 +5,13 @@
       (przesuń prawo-lewo żeby zobaczyć kandydatów, dotknij żeby zagłosować)
     </p>
     <p v-else class="text-center">
-      (kliknij na obrazek, albo klawisz prawo/lewo na klawiaturze)
+      (kliknij na obrazek albo klawisz lewo/prawo na klawiaturze)
 
     </p>
     <h2 class="text-center"> Temat: {{ subject.name }}</h2>
-    <div class="row justify-around">
+    <div class="row justify-center">
       <div
-          class="col-5"
+          class="col-5 text-center"
           v-for="entry in entries"
           :key="entry.id"
           @click="registerVote(entry.id)"
@@ -20,10 +20,15 @@
       </div>
     </div>
   </div>
+  <div v-else class="row justify-center">
+    Nie masz już żadnych zdjęć do oceny w tym challenge'u ;)
+  </div>
 </template>
 
 <script>
+import {Cookies} from 'quasar';
 import {api} from 'boot/axios';
+// TODO: enhance photo
 
 export default {
   name: 'VotePage',
@@ -31,29 +36,14 @@ export default {
     return {
       isMobile: false,
       subject: {name: null, id: null},
-      entries: [],
-      challengeId: '3ab58738-02bd-4dd0-9df3-79e75a1cdb9c',
+      entries: null,
+      challengeId: Cookies.get('challenge'),
+      token: Cookies.get('auth_token'),
     };
   },
   mounted() {
     // TODO: log errors
-    api
-        .get(
-            `available_picks/?challenge_id=${this.challengeId}`,
-            {
-              headers:
-                  {
-                    Authorization:
-                        'Token 1da510a6e5b308a896e9a2919f5b377600341ae3',
-                  },
-            },
-        )
-        .then((response) => {
-          console.log(response);
-          this.entries = response.data.entries;
-          this.subject = {name: response.data.name, id: response.data.id};
-        })
-        .catch((response) => console.error(response));
+    this.getPicks();
     window.addEventListener('keyup', this.parseKeyboardVote);
   },
   methods: {
@@ -74,13 +64,31 @@ export default {
                 entry_id: entryId,
               },
               {
-                headers:
-                    {
-                      Authorization:
-                          'Token 1da510a6e5b308a896e9a2919f5b377600341ae3',
-                    },
+                headers: {Authorization: `Token ${this.token}`},
               },
-          );
+          )
+          .then(this.getPicks)
+          .catch((response) => console.log(response))
+      ;
+    },
+    getPicks() {
+      api
+          .get(
+              `available_picks/?challenge_id=${this.challengeId}`,
+              {
+                headers: {Authorization: `Token ${this.token}`},
+              },
+          )
+          .then((response) => {
+            console.log(response);
+            this.entries = response.data.entries;
+            this.subject = {name: response.data.name, id: response.data.id};
+          })
+          .catch(
+              (response) => {
+                this.entries = null;
+                console.error(response);
+              });
     },
   },
 };

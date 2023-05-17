@@ -7,6 +7,10 @@ from django.db import models
 
 class User(AbstractUser):
     deleted = models.BooleanField(default=False)
+    chosen_name = models.CharField(
+        max_length=256,
+        help_text='Name that the user provided',
+    )
 
     def delete(  # type: ignore[override]
         self,

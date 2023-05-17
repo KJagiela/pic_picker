@@ -91,7 +91,7 @@ module.exports = configure(function(/* ctx */) {
       // lang: 'en-US', // Quasar language pack
 
       // Quasar plugins
-      plugins: [],
+      plugins: ['Cookies'],
     },
 
     // animations: 'all', // --- includes all animations

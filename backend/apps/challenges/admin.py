@@ -12,11 +12,16 @@ class ChallengeAdmin(admin.ModelAdmin):
 
 
 class ChallengeEntryAdmin(admin.ModelAdmin):
+    list_display = ('subject', 'owner', 'votes_count')
     readonly_fields = ('owner',)
 
     def save_model(self, request, obj, form, change):
         obj.owner = request.user
         obj.save()
+
+    @admin.display(empty_value='0')
+    def votes_count(self, obj):
+        return obj.voters.count()
 
 
 admin.site.register(models.Challenge, ChallengeAdmin)
