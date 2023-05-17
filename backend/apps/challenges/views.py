@@ -26,6 +26,7 @@ class PicPickerView(APIView):
             current_subject,
             context={'request': request},
         ).data
+        random.shuffle(serializer_data['entries'])
         return Response(serializer_data)
 
 
