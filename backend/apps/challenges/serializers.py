@@ -18,6 +18,7 @@ class PhotoSubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.PhotoSubject
         fields = (
+            'id',
             'name',
             'entries',
         )

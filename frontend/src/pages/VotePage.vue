@@ -8,7 +8,7 @@
       (kliknij na obrazek, albo klawisz prawo/lewo na klawiaturze)
 
     </p>
-    <h2 class="text-center"> Temat: {{ subject }}</h2>
+    <h2 class="text-center"> Temat: {{ subject.name }}</h2>
     <div class="row justify-around">
       <div
           class="col-5"
@@ -30,16 +30,16 @@ export default {
   data() {
     return {
       isMobile: false,
-      subject: null,
+      subject: {name: null, id: null},
       entries: [],
+      challengeId: '3ab58738-02bd-4dd0-9df3-79e75a1cdb9c',
     };
   },
   mounted() {
     // TODO: log errors
     api
         .get(
-            'available_picks/' +
-            '?challenge_id=3ab58738-02bd-4dd0-9df3-79e75a1cdb9c',
+            `available_picks/?challenge_id=${this.challengeId}`,
             {
               headers:
                   {
@@ -51,7 +51,7 @@ export default {
         .then((response) => {
           console.log(response);
           this.entries = response.data.entries;
-          this.subject = response.data.name;
+          this.subject = {name: response.data.name, id: response.data.id};
         })
         .catch((response) => console.error(response));
     window.addEventListener('keyup', this.parseKeyboardVote);
@@ -66,7 +66,21 @@ export default {
       }
     },
     registerVote(entryId) {
-      console.log(`voting for ${entryId}`);
+      api
+          .post(
+              'vote/',
+              {
+                subject_id: this.subject.id,
+                entry_id: entryId,
+              },
+              {
+                headers:
+                    {
+                      Authorization:
+                          'Token 1da510a6e5b308a896e9a2919f5b377600341ae3',
+                    },
+              },
+          );
     },
   },
 };
