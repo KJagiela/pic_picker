@@ -1,7 +1,7 @@
 <template>
   <q-card class="form-card fixed-center q-px-md">
     <q-card-section>
-      <h3 class="form-text">Kto będzie głosował?</h3>
+      <h3 class="form-text text-center">Kto będzie głosował?</h3>
       <q-input
           input-class="text-center"
           class="form-input q-py-md q-px-xl"
