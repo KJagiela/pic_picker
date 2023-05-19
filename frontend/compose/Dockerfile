@@ -10,7 +10,7 @@ RUN npm install yarn
 
 RUN yarn global add @quasar/cli http-server
 
-COPY frontend/package.json frontend/yarn.lock /app/
+COPY package.json yarn.lock /app/
 
 RUN yarn install
 

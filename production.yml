@@ -2,6 +2,7 @@ version: '3'
 
 volumes:
   production_django_media: {}
+  production_traefik: {}
 
 services:
   app:
@@ -11,19 +12,30 @@ services:
     volumes:
       - production_django_media:/app/photo_voter/media
     depends_on:
-      - postgres
       - redis
     env_file:
-      - ./.envs/.production/.django
-      - ./.envs/.production/.postgres
+      - ./backend/.env
+
+  web:
+    build:
+      context: ./frontend
+      dockerfile: ./compose/Dockerfile
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    env_file:
+      - ./frontend/.env
 
   traefik:
     build:
-      context: .
+      context: ./backend
       dockerfile: ./compose/production/traefik/Dockerfile
     image: photo_voter_production_traefik
     depends_on:
-      - django
+      - app
+      - web
     volumes:
       - production_traefik:/etc/traefik/acme
     ports:
@@ -35,10 +47,10 @@ services:
 
   nginx:
     build:
-      context: .
+      context: ./backend
       dockerfile: ./compose/production/nginx/Dockerfile
     image: photo_voter_local_nginx
     depends_on:
-      - django
+      - app
     volumes:
       - production_django_media:/usr/share/nginx/media:ro
