@@ -30,6 +30,8 @@ FROM nginx:1.21 as production-stage
 
 COPY --from=build-stage /app/dist/spa /usr/share/nginx/html
 
+RUN ls
+
 COPY ./compose/default.conf /default.conf
 COPY ./compose/start.sh /start.sh
 
