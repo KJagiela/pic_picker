@@ -2,11 +2,11 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "apt install libpython3.11-dev && pip install -r requirements/production.txt"
+    "buildCommand": "docker build -f compose/production/django/Dockerfile -t pick-pic ."
   },
   "deploy": {
     "numReplicas": 1,
-    "startCommand": "gunicorn mysite.wsgi",
+    "startCommand": "docker run -dp 8000:5000 pick-pic",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }
