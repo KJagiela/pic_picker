@@ -1,0 +1,13 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "apt install python3.11-dev && pip install -r requirements/production.txt"
+  },
+  "deploy": {
+    "numReplicas": 1,
+    "startCommand": "gunicorn mysite.wsgi",
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10
+  }
+}
