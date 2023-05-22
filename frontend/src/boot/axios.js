@@ -7,6 +7,7 @@ import axios from 'axios';
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
+// TODO: read env
 const api = axios.create({baseURL: 'https://pickpic-be.up.railway.app/api/'});
 
 export default boot(({app}) => {

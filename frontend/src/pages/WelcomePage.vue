@@ -41,8 +41,12 @@ export default {
       )
           .then((response) => {
             this.token = response.data.token;
+            let challenge = this.$route.query.challenge;
+            if (!challenge) {
+              challenge = '0d09f9e3-000d-43e6-b22e-06425d5838f9';
+            }
             Cookies.set('auth_token', this.token);
-            Cookies.set('challenge', this.$route.query.challenge);
+            Cookies.set('challenge', challenge);
             this.$router.push({name: 'vote'});
           })
           .catch((response) => {
