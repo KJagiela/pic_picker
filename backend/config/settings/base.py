@@ -67,6 +67,7 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'cloudinary',
 ]
 
 LOCAL_APPS = [
@@ -251,5 +252,7 @@ REST_FRAMEWORK = {
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
 # CORS_URLS_REGEX = r'^/api/.*$'
 CORS_ALLOW_ALL_ORIGINS = True
-# Your stuff...
-# ------------------------------------------------------------------------------
+
+# Cloudinary
+CLOUDINARY_URL=env('CLOUDINARY_URL')
+CLOUDINARY_FOLDER=env('CLOUDINARY_FOLDER', default='local')
