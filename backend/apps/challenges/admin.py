@@ -16,8 +16,9 @@ class ChallengeEntryAdmin(admin.ModelAdmin):
     readonly_fields = ('owner',)
 
     def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        obj.save()
+        if not change:
+            obj.owner = request.user
+        super().save_model(request, obj, form, change)
 
     @admin.display(empty_value='0')
     def votes_count(self, obj):
