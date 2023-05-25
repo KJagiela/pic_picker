@@ -8,7 +8,7 @@ import axios from 'axios';
 // "export default () => {}" function below (which runs individually
 // for each client)
 // TODO: read env
-const api = axios.create({baseURL: 'https://pickpic-be.up.railway.app/api/'});
+const api = axios.create({baseURL: process.env.API_URL});
 
 export default boot(({app}) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api

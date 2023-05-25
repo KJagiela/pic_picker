@@ -3,7 +3,7 @@
   <p class="text-center">
     (kliknij na obrazek albo klawisz lewo/prawo na klawiaturze)
   </p>
-  <h2 class="text-center"> Temat: {{ subject.name }}</h2>
+  <h2 class="text-center"> {{ subject.name }}</h2>
   <div class="row justify-center">
     <div
         class="col-5 text-center"
