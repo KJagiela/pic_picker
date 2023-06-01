@@ -13,6 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='challengeentry',
             name='photo',
-            field=apps.challenges.models.ChallengeEntryCloudinaryField(max_length=255),
+            field=apps.challenges.models.ChallengeEntryCloudinaryField(
+                max_length=255, verbose_name='image'
+            ),
         ),
     ]
