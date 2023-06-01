@@ -3,7 +3,7 @@
   <p class="text-center">
     (przesuń prawo-lewo żeby zobaczyć kandydatów, dotknij dwukrotnie żeby zagłosować)
   </p>
-  <h2 class="text-center q-my-sm"> Temat: {{ subject.name }}</h2>
+  <h2 class="text-center q-my-sm"> {{ subject.name }}</h2>
   <q-carousel
       v-model="slide"
       animated
