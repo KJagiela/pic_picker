@@ -7,11 +7,7 @@ import axios from 'axios';
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
-let apiUrl = process.env.API_URL;
-console.log('wtffffffffffffffffffffffffff', apiUrl);
-if (apiUrl === undefined) {
-  apiUrl = 'https://pickpic-be.up.railway.app';
-}
+
 const api = axios.create({baseURL: `${process.env.API_URL}/api/`});
 
 export default boot(({app}) => {

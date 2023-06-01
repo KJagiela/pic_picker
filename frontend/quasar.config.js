@@ -55,7 +55,7 @@ module.exports = configure(function(/* ctx */) {
 
       vueRouterMode: 'history',
       env: {
-        API_URL: process.env.API_URL,
+        API_URL: process.env.API_URL ? process.env.API_URL : 'https://pickpic-be.up.railway.app',
       },
       // vueRouterBase,
       // vueDevtools,
