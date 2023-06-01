@@ -8,6 +8,7 @@ import axios from 'axios';
 // "export default () => {}" function below (which runs individually
 // for each client)
 let apiUrl = process.env.API_URL;
+console.log('wtffffffffffffffffffffffffff', apiUrl);
 if (apiUrl === undefined) {
   apiUrl = 'https://pickpic-be.up.railway.app';
 }
