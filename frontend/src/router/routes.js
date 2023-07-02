@@ -10,6 +10,11 @@ const routes = [
     name: 'vote',
   },
   {
+    path: '/results',
+    component: () => import('pages/ResultsPage.vue'),
+    name: 'results',
+  },
+  {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
   },

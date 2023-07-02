@@ -1,4 +1,3 @@
-from django.conf import settings
 from rest_framework import serializers
 
 from apps.challenges import models
@@ -6,6 +5,7 @@ from apps.challenges import models
 
 class ChallengeEntrySerializer(serializers.ModelSerializer):
     photo = serializers.SerializerMethodField()
+
     class Meta:
         model = models.ChallengeEntry
         fields = (
@@ -15,6 +15,13 @@ class ChallengeEntrySerializer(serializers.ModelSerializer):
 
     def get_photo(self, obj):
         return obj.photo.build_url()
+
+
+class ChallengeEntryResultsSerializer(ChallengeEntrySerializer):
+    votes_count = serializers.SerializerMethodField
+
+    class Meta(ChallengeEntrySerializer.Meta):
+        fields = ChallengeEntrySerializer.Meta.fields + ('votes_count',)
 
 
 class PhotoSubjectSerializer(serializers.ModelSerializer):

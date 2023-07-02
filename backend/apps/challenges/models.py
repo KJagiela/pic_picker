@@ -5,8 +5,10 @@ from django.db import models
 
 from cloudinary.models import CloudinaryField
 
+
 def entry_path(instance: 'ChallengeEntry', filename: str) -> str:
     return f'entry/challenge_{instance.subject.challenge.id}/{filename}'
+
 
 class ChallengeEntryCloudinaryField(CloudinaryField):
     def pre_save(self, model_instance, add):

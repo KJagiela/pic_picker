@@ -4,6 +4,7 @@ from apps.challenges import models
 
 
 class ChallengeAdmin(admin.ModelAdmin):
+    list_display = ('id', '__str__', 'owner')
     readonly_fields = ('owner',)
 
     def save_model(self, request, obj, form, change):

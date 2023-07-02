@@ -34,7 +34,6 @@ export default {
   mounted() {
     // TODO: log errors
     this.getPicks();
-    window.addEventListener('keyup', this.parseKeyboardVote);
   },
   methods: {
     registerVote(entryId) {
@@ -53,6 +52,7 @@ export default {
           .catch((response) => console.log(response))
       ;
     },
+    // TODO: optimize, its slow AF
     getPicks() {
       api
           .get(
@@ -62,6 +62,9 @@ export default {
               },
           )
           .then((response) => {
+            if (response.status === 226) {
+              this.$router.push({name: 'results'});
+            }
             console.log(response);
             this.entries = response.data.entries;
             this.subject = {name: response.data.name, id: response.data.id};
