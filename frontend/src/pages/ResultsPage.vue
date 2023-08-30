@@ -74,8 +74,8 @@ export default {
           .then((response) => {
             this.chosen = response.data.chosen;
             this.subjects = response.data.subjects;
-            this.firstChallenger = response.data.owners[0].id;
-            this.secondChallenger = response.data.owners[1].id;
+            this.firstChallenger = response.data.owners[0].entry__owner_id;
+            this.secondChallenger = response.data.owners[1].entry__owner_id;
             this.firstChallengerScore = response.data.owners[0].score;
             this.secondChallengerScore = response.data.owners[1].score;
           })

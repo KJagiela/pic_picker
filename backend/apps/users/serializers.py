@@ -12,3 +12,4 @@ class UserVoteSerializer(serializers.ModelSerializer):
         fields = (
             'chosen_entry',
         )
+
