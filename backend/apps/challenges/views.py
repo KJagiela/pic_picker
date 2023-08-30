@@ -1,4 +1,5 @@
 import random
+from collections import defaultdict
 
 from django.db.models import Count
 from django.shortcuts import get_object_or_404
@@ -55,8 +56,24 @@ class RegisterVoteView(APIView):
 class ResultsView(APIView):
     # TODO: security - can't see if you have unrated photos
     def get(self, request: Request, *args, **kwargs):
-        votes = UserVote.objects.filter(user=request.user).prefetch_related(
-            'subject', 'subject__entries', 'entry'
-        )
-        serializer = UserVoteSerializer(votes, many=True)
-        return Response(data=serializer.data)
+        challenge_id = request.GET.get('challenge_id')
+        challenge = get_object_or_404(Challenge, id=challenge_id)
+        subjects = challenge.subjects.all()
+        # maybe DB design wasn't the greatest :thinking:
+        entries = subjects.values_list('name', 'entries__owner__username', 'entries__photo', 'entries__id')
+        serialized_entries = defaultdict(defaultdict)
+        owners = set()
+        for subject_name, entry_owner, entry_photo, entry_id in entries:
+            if not entry_id:
+                continue
+            entry_photo_url = entry_photo.build_url(width='200')
+            serialized_entries[subject_name][entry_owner] = {'id': entry_id, 'photo': entry_photo_url, 'votes': random.randint(0, 10)}
+            owners.add(entry_owner)
+        votes = UserVote.objects.filter(user=request.user).prefetch_related('entry')
+        votes_serializer = UserVoteSerializer(votes, many=True)
+        chosen_ids = [chosen['chosen_entry'] for chosen in votes_serializer.data]
+        owners = [{'id': owner} for owner in owners]
+        for owner in owners:
+            owner['score'] = UserVote.objects.filter(entry__owner__username=owner['id']).count()
+        
+        return Response(data={'subjects': dict(serialized_entries), 'chosen': chosen_ids, 'owners': owners})
