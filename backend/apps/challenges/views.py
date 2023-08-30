@@ -8,6 +8,7 @@ from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 
 from apps.challenges.models import Challenge, ChallengeEntry
 from apps.challenges.serializers import PhotoSubjectSerializer, ChallengeEntryResultsSerializer
@@ -53,24 +54,32 @@ class RegisterVoteView(APIView):
         return Response()
 
 
-class ResultsView(APIView):
+class ResultsView(ListAPIView):
     # TODO: security - can't see if you have unrated photos
-    def get(self, request: Request, *args, **kwargs):
+    serializer_class = ChallengeEntryResultsSerializer
 
-        challenge_id = request.GET.get('challenge_id')
+    def get_queryset(self):
+        challenge_id = self.request.GET.get('challenge_id')
         challenge = get_object_or_404(Challenge, id=challenge_id)
         subjects = challenge.subjects.all()
-        entries = ChallengeEntry.objects.filter(subject__in=subjects)
+        entries = ChallengeEntry.objects.filter(subject__in=subjects).annotate(score=Count('voters'))
+        return entries
 
-        serialized_entries = defaultdict(defaultdict)
-        for entry in entries:
-            serialized_entry = ChallengeEntryResultsSerializer(entry)
-            serialized_entries[str(entry.subject.name)][entry.owner_id] = serialized_entry.data
+    def reformat_serialized_entries(self, serialized_entries):
+        reformatted_entries = defaultdict(defaultdict)
+        for entry in serialized_entries:
+            name = entry.pop('subject_name')
+            owner = entry.pop('owner')
+            reformatted_entries[name][owner] = entry
+        return reformatted_entries
 
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
         chosen_entries = list(
             UserVote.objects.filter(user=request.user).values_list('entry_id', flat=True)
         )
-
-        owners = list(UserVote.objects.filter(entry__in=entries).values('entry__owner_id').annotate(score=Count('id')))
-
-        return Response(data={'subjects': serialized_entries, 'chosen': chosen_entries, 'owners': owners})
+        owners = list(UserVote.objects.filter(entry__in=self.get_queryset()).values('entry__owner__username').annotate(score=Count('id')))
+        for owner in owners:
+            owner['name'] = owner.pop('entry__owner__username')
+        response.data = {'subjects': self.reformat_serialized_entries(response.data), 'chosen': chosen_entries, 'owners': owners}
+        return response

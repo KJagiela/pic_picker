@@ -25,10 +25,10 @@
         <div class="text-center subject">{{ sub_name }}</div>
           <div class="q-mx-xl row">
             <div class="results-left" :style="calculateWidth(sub_data, 1)">
-              <div class="text-center result-val">{{ sub_data[firstChallenger].votes}}</div>
+              <div class="text-center result-val">{{ sub_data[firstChallenger].score}}</div>
             </div>
             <div class="results-right" :style="calculateWidth(sub_data, 2)">
-              <div class="text-center result-val">{{ sub_data[secondChallenger].votes }}</div>
+              <div class="text-center result-val">{{ sub_data[secondChallenger].score }}</div>
             </div>
           </div>
         </div>
@@ -74,8 +74,8 @@ export default {
           .then((response) => {
             this.chosen = response.data.chosen;
             this.subjects = response.data.subjects;
-            this.firstChallenger = response.data.owners[0].entry__owner_id;
-            this.secondChallenger = response.data.owners[1].entry__owner_id;
+            this.firstChallenger = response.data.owners[0].name;
+            this.secondChallenger = response.data.owners[1].name;
             this.firstChallengerScore = response.data.owners[0].score;
             this.secondChallengerScore = response.data.owners[1].score;
           })
